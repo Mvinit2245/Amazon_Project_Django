@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon - Products</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        /* Header Styling */
+        h1 {
+            background-color: #232f3e;
+            color: white;
+            padding: 20px;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        /* Product Container */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch; /* Ensures all cards have equal height */
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Product Card */
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 15px;
+            padding: 20px;
+            width: 320px; /* Set consistent width */
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 480px; /* Ensure equal card sizes */
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card h2 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        /* Ensure images do not overflow */
+        .product-image {
+            width: 100%;
+            height: 220px; /* Adjust height */
+            object-fit: contain; /* Prevents cropping */
+            border-radius: 8px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #b12704;
+            margin-top: 10px;
+        }
+
+        /* Button Container */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .btn-cart {
+            background-color: #ff9900;
+            color: white;
+        }
+
+        .btn-cart:hover {
+            background-color: #e68a00;
+        }
+
+        .btn-buy {
+            background-color: #ff4500;
+            color: white;
+        }
+
+        .btn-buy:hover {
+            background-color: #d93600;
+        }
+
+        /* Form Styling */
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+            margin: 40px auto;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: #232f3e;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: left;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input, textarea, select {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #ff9900;
+            outline: none;
+            box-shadow: 0 0 8px rgba(255, 153, 0, 0.5);
+        }
+
+        input[type="submit"] {
+            background-color: #ff9900;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 12px;
+            transition: 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e68a00;
+        }
+    </style>
+</head>
+<body>
+    <h1>Amazon - Furniture Collection</h1>
+    <div class="container">
+        {% for pro in prod %}
+        <div class="card">
+            <h2>{{ pro.name }}</h2>
+            {% if pro.image %}
+                <img src="{{ pro.image.url }}" alt="{{ pro.name }}" class="product-image">
+            {% else %}
+                <p>No image available</p>
+            {% endif %}
+
+            <p><strong>Material:</strong> {{ pro.material }}</p>
+            <p>{{ pro.description }}</p>
+            <p class="price">Price: ₹{{ pro.price }}</p>
+
+            <a href="{% url 'update_product' pro.id%}"> 
+                <button type="button" class="btn btn-cart">Update</button>
+            </a>
+            <a href="{% url 'delete_product' pro.id%}"> 
+                <button type="button" class="btn btn-buy">Delete</button>
+            </a>
+
+            <!-- Button Container -->
+            <div class="btn-container">
+                <button class="btn btn-cart">Add to Cart</button>
+                <button class="btn btn-buy">Buy Now</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Form Section -->
+    <div class="form-container">
+        <h3>Add Furniture Product</h3>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" class="button" value="Add to products">
+        </form>
+    </div>
+
+</body>
+</html>
